@@ -20,10 +20,7 @@ type Character struct {
 }
 
 func main() {
-    db, err := gorm.Open("sqlite3", "trood20.db")
-    if err != nil {
-        panic("failed to connect database")
-    }
+    db := initDb()
     db.AutoMigrate(&Character{})
     iris.Get("/", welcome)
     iris.Get("/dice", dice)
@@ -44,4 +41,12 @@ func dice(ctx *iris.Context) {
 
 func roll() int {
     return rand.Intn(20) + 1
+}
+
+func initDb() *gorm.DB {
+    db, err := gorm.Open("sqlite3", "trood20.db")
+    if err != nil {
+        panic("failed to connect database")
+    }
+    return db
 }
