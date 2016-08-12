@@ -21,7 +21,7 @@ type Character struct {
 
 func main() {
     db := initDb()
-    db.AutoMigrate(&Character{})
+    migrateDB(db)
     iris.Get("/", welcome)
     iris.Get("/dice", dice)
 
@@ -49,4 +49,8 @@ func initDb() *gorm.DB {
         panic("failed to connect database")
     }
     return db
+}
+
+func migrateDB(db *gorm.DB) {
+    db.AutoMigrate(&Character{})
 }
