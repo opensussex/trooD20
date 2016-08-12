@@ -1,8 +1,11 @@
 package main
 
-import  "github.com/kataras/iris"
-import "math/rand"
-
+import  (
+    "github.com/kataras/iris"
+    "math/rand"
+    "github.com/jinzhu/gorm"
+    _ "github.com/jinzhu/gorm/dialects/sqlite"
+)
 
 type response struct {
     Message string `json:"message"`
@@ -10,9 +13,18 @@ type response struct {
     Value int `json:"value"`
 }
 
+type Character struct {
+  gorm.Model
+  Name string
+  Age uint
+}
 
 func main() {
-
+    db, err := gorm.Open("sqlite3", "trood20.db")
+    if err != nil {
+        panic("failed to connect database")
+    }
+    db.AutoMigrate(&Character{})
     iris.Get("/", welcome)
     iris.Get("/dice", dice)
 
